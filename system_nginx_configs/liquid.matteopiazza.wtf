@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name liquid.matteopiazza.wtf;
+
+    location / {
+        # Docker container's internal network IP and port (see "networks" definition in docker-compose.yml file)
+        proxy_pass http://172.18.0.10:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    error_log /var/log/nginx/liquid.matteopiazza.wtf-error.log;
+    access_log /var/log/nginx/liquid.matteopiazza.wtf-access.log;
+}

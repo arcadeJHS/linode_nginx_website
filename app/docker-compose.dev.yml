@@ -1,0 +1,33 @@
+name: linode_docker_test
+services:
+  nginx:
+    container_name: linode_docker_test_nginx
+    restart: always
+    build:
+      context: ./docker/nginx
+      dockerfile: nginx.Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      # - ./frontend:/var/www/html
+
+  api:
+    container_name: linode_docker_test_api
+    restart: always
+    image: "oven/bun"
+    ports:
+      - 3000:3000
+    volumes: ["./api:/home/bun/app"]
+    entrypoint: []
+    command: "/bin/sh -c 'bun install && bun run dev --port 3000'"
+
+  frontend:
+    container_name: linode_docker_test_api_frontend
+    restart: always
+    image: "oven/bun"
+    ports:
+      - "5173:5173"
+    volumes: ["./frontend:/home/bun/app"]
+    entrypoint: []
+    command: "/bin/sh -c 'bun install && bun run dev --port 5173 --host'"
